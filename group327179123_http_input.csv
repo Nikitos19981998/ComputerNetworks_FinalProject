@@ -1,0 +1,6 @@
+msg_id,app_protocol,src_app,dst_app,message,timestamp
+1,HTTP,client_browser,web_server,GET /index.html,0.015
+2,HTTP,web_server,client_browser,HTTP/1.1 200 OK,0.020
+3,DNS,client_resolver,dns_server,QUERY google.com,0.025
+4,FTP,ftp_client,ftp_server,USER admin,0.030
+5,FTP,ftp_server,ftp_client,331 Password required,0.035
