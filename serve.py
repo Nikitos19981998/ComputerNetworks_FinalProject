@@ -64,3 +64,57 @@ def start_server():
 
 if __name__ == "__main__":
     start_server()
+
+
+
+קוד לקוח
+
+import socket
+import threading
+import sys
+
+HOST = '127.0.0.1'
+PORT = 5555
+
+def receive_messages(client_socket):
+    """האזנה להודעות נכנסות מהשרת"""
+    while True:
+        try:
+            message = client_socket.recv(1024).decode('utf-8')
+            if not message:
+                break
+            print(f"\n{message}\nYour message: ", end='')
+        except:
+            print("Disconnected from server.")
+            client_socket.close()
+            break
+
+def start_client():
+    # יצירת שם ייחודי ללקוח (דרך קלט או ארגומנטים)
+    username = input("Enter your username: ")
+    
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        client.connect((HOST, PORT))
+        # שליחת השם לשרת מיד בהתחברות
+        client.send(username.encode('utf-8'))
+        
+        # התחלת תהליכון לקבלת הודעות כדי לא לתקוע את ה-input
+        receive_thread = threading.Thread(target=receive_messages, args=(client,))
+        receive_thread.start()
+        
+        print(f"Connected as {username}. To send msg use format: 'Target: Message'")
+        
+        while True:
+            msg = input("Your message: ")
+            if msg.lower() == 'quit':
+                break
+            client.send(msg.encode('utf-8'))
+            
+    except Exception as e:
+        print(f"Connection error: {e}")
+    finally:
+        client.close()
+
+if __name__ == "__main__":
+    start_client()
