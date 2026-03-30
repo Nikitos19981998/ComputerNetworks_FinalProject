@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקופון של אביהו</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2c3e50;
+            margin: 0;
+        }
+        .coupon-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+        }
+        h1 { font-size: 26px; margin-bottom: 10px; color: #333; }
+        p { font-size: 18px; color: #555; margin-bottom: 25px; line-height: 1.4; }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .beer-btn {
+            background-color: #f1c40f;
+            border: none;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .beer-btn:active { transform: scale(0.95); }
+        .beer-btn.used {
+            background-color: #ecf0f1;
+            color: #bdc3c7;
+            text-decoration: line-through;
+            box-shadow: none;
+        }
+        .reset-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="coupon-card">
+    <h1>הקופון של אביהו 🍻</h1>
+    <p>מזל טוב! זכית בקופון לבירה/סיידר איתי על חשבוני.</p>
+    
+    <div class="grid">
+        <button class="beer-btn" id="btn1" onclick="toggleUse(1)">1</button>
+        <button class="beer-btn" id="btn2" onclick="toggleUse(2)">2</button>
+        <button class="beer-btn" id="btn3" onclick="toggleUse(3)">3</button>
+        <button class="beer-btn" id="btn4" onclick="toggleUse(4)">4</button>
+    </div>
+
+    <button class="reset-btn" onclick="resetCoupon()">אפס קופון</button>
+</div>
+
+<script>
+    // טעינת המצב השמור (כדי שהניקובים יישמרו גם אחרי סגירת הדפדפן)
+    for (let i = 1; i <= 4; i++) {
+        if (localStorage.getItem('beer' + i) === 'used') {
+            document.getElementById('btn' + i).classList.add('used');
+        }
+    }
+
+    // פונקציה ללחיצה על כפתור (ניקוב או ביטול ניקוב)
+    function toggleUse(num) {
+        let btn = document.getElementById('btn' + num);
+        if (btn.classList.contains('used')) {
+            btn.classList.remove('used');
+            localStorage.removeItem('beer' + num);
+        } else {
+            btn.classList.add('used');
+            localStorage.setItem('beer' + num, 'used');
+        }
+    }
+
+    // פונקציה לאיפוס מלא של הקופון
+    function resetCoupon() {
+        if(confirm("בטוח שאתה רוצה לאפס את הקופון?")) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('btn' + i).classList.remove('used');
+                localStorage.removeItem('beer' + i);
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
